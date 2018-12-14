@@ -1,6 +1,6 @@
 # student-directory
 
-##Welcome##
+## Welcome
 This file is written in **markdown**.
 *Markdown* is an easy-to-read, easy-to-write syntax for formatting plain text. You can do a number of nice formatting actions.
 
