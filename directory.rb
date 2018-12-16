@@ -40,8 +40,8 @@ def print_header
 end
 
 def print(records)
-  records.each do |record|
-    puts "#{record[:name]} (#{record[:cohort]} cohort)"
+  records.each.with_index(1) do |record, index|
+    puts "#{index}: #{record[:name]} (#{record[:cohort]} cohort)"
   end
 end
 
