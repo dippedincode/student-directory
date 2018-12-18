@@ -1,10 +1,11 @@
-@students = [] # an empty array accessible to all methods
+@students = []  # an empty array accessible to all methods
 
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the list to students.csv"
   puts "9. Exit"
-  puts "Enter 1,2 or 9:"
+  puts "Enter 1, 2, 3 or 9:"
 end
 
 def process(selection)
@@ -13,8 +14,10 @@ def process(selection)
     input_students
   when "2"
     show_students
+  when "3"
+    save_students
   when "9"
-    exit # this will stop the program
+    exit  # this will stop the program
   else
     puts "I don't know what you meant, please try again"
   end
@@ -36,7 +39,6 @@ end
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-     #students = []
   # get the first name
   name = gets.chomp
   # while the name is not empty, repeat this code
@@ -56,7 +58,7 @@ end
 
 def print_list
 # previously used .each method as follows:
-#  records.each.with_index(1) do |record, index|
+#  array.each.with_index(1) do |record, index|
 #    puts "#{index}: #{record[:name]} (#{record[:cohort]} cohort)"
   k = 0
   while @students[k] do
@@ -67,6 +69,16 @@ end
 
 def print_footer
   puts "Overall, we have #{@students.count} great student#{@students.count != 1 ? "s" : ""}"
+end
+
+def save_students
+  file = File.open("students.csv", "w")
+  @students.each do |student|   # iterate over the array of student records
+    student_data = [student[:name], student[:cohort]]   # convert hash to an array
+    csv_line = student_data.join(",")   # turn that array into string "a,b"
+    file.puts csv_line
+  end
+  file.close
 end
 
 # call the menu
