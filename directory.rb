@@ -40,8 +40,12 @@ def print_header
 end
 
 def print(records)
-  records.each.with_index(1) do |record, index|
-    puts "#{index}: #{record[:name]} (#{record[:cohort]} cohort)"
+#  records.each.with_index(1) do |record, index|
+#    puts "#{index}: #{record[:name]} (#{record[:cohort]} cohort)"
+  k = 0
+  while records[k] do
+    puts "#{k+1}: #{records[k][:name]} (#{records[k][:cohort]} cohort)"
+    k += 1
   end
 end
 
