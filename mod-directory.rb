@@ -25,7 +25,7 @@ end
 def print_list(records, letter)
   k = 1
   records.each do |record, index|
-    if record[:name][0].upcase == letter.upcase
+    if record[:name][0].upcase == letter.upcase && record[:name].length < 12
       puts "#{k}: #{record[:name]} (#{record[:cohort]} cohort)"
       k += 1
     else
