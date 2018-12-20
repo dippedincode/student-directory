@@ -2,11 +2,13 @@
 
 def print_menu
   puts "1. Input the students"
-  puts "2. Show the students"
+  puts "2. Show the students list"
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
+  puts "5. Clear the list from program memory"
+  puts "6. Clear the file students.csv"
   puts "9. Exit"
-  puts "Enter 1, 2, 3 or 9:"
+  puts "Enter a number:"
 end
 
 def process(selection)
@@ -17,8 +19,12 @@ def process(selection)
     show_students
   when "3"
     save_students   
-  when "4"
+  when "4" 
     load_students   # now this will load from students.csv by default
+  when "5"
+    clear_list_memory
+  when "6"
+    clear_students_file
   when "9"
     exit  # this will stop the program
   else
@@ -90,6 +96,16 @@ def load_students(filename = "students.csv")
     name, cohort = line.chomp.split(",")
     @students << {name: name, cohort: cohort.to_sym}
   end
+  file.close
+end
+
+def clear_list_memory
+  @students = []
+end
+
+def clear_students_file
+  file = File.open("students.csv", "w")
+  file.print ""   # overwrite whatever is in the file with no character
   file.close
 end
 
