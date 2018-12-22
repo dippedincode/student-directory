@@ -33,9 +33,13 @@ def process(selection)
 end
 
 def show_students
-  print_header
-  print_list
-  print_footer
+  if @students.count != 0
+    print_header
+    print_list
+    print_footer
+  else
+    puts "Currently there are no students at Villains Academy."
+  end
 end
 
 def interactive_menu
@@ -61,8 +65,8 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  puts "The students of Villains Academy".center(40)
+  puts "--------------------------------".center(40)
 end
 
 def print_list
@@ -71,13 +75,13 @@ def print_list
 #    puts "#{index}: #{record[:name]} (#{record[:cohort]} cohort)"
   k = 0
   while @students[k] do
-    puts "#{k+1}: #{@students[k][:name]} (#{@students[k][:cohort]} cohort)"
+    puts "    #{k+1}: #{@students[k][:name]} (#{@students[k][:cohort]} cohort)"
     k += 1
   end
 end
 
 def print_footer
-  puts "Overall, we have #{@students.count} great student#{@students.count != 1 ? "s" : ""}"
+  puts "Overall, we have #{@students.count} great student#{@students.count != 1 ? "s" : ""}".center(40)
 end
 
 def save_students

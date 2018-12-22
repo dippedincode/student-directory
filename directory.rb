@@ -35,8 +35,8 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  puts "The students of Villains Academy".center(40)
+  puts "--------------------------------".center(40)
 end
 
 def print(records)
