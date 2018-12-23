@@ -59,18 +59,22 @@ def input_students
   while !name.empty? do
     # add the student record hash to the array
     @students << {name: name, "cohort" => "undefined"}
-    puts "Please enter the student's cohort"
-    puts "To finish, just hit return twice"
-    cohort = STDIN.gets.chomp
-    cohort = cohort.strip.capitalize
-    while (!cohort.empty? && Date::MONTHNAMES.include?(cohort)) do
-      @students.last["cohort"] = cohort
-      break
+    puts "Please enter a valid month for the student's cohort"
+    #puts "To finish, just hit return twice"
+    loop do
+      cohort = STDIN.gets.chomp
+      cohort = cohort.strip.capitalize
+      if !cohort.empty? && Date::MONTHNAMES.include?(cohort)
+        @students.last["cohort"] = cohort
+        puts "Now we have #{@students.count} student#{@students.count != 1 ? "s" : ""}"
+        puts "Please enter the next student's name"
+        puts "To finish, just hit return again"
+        break
+      else
+        puts "That is an invalid month, please try again"
+      end 
     end
-      puts "Now we have #{@students.count} student#{@students.count != 1 ? "s" : ""}"
-      puts "Please enter the student's name"
-      puts "To finish, just hit return again"
-      name = STDIN.gets.chomp   # get another name
+    name = STDIN.gets.chomp   # get another name
   end
 end
 
