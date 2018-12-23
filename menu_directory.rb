@@ -1,3 +1,5 @@
+require 'date'
+
 @students = []  # an empty array accessible to all methods
 
 def print_menu
@@ -56,11 +58,12 @@ def input_students
   # while name is not empty, repeat this code
   while !name.empty? do
     # add the student record hash to the array
-    @students << {name: name, "cohort" => "tbd_cohort"}
+    @students << {name: name, "cohort" => "undefined"}
     puts "Please enter the student's cohort"
     puts "To finish, just hit return twice"
     cohort = STDIN.gets.chomp
-    while !cohort.empty? do
+    cohort = cohort.strip.capitalize
+    while (!cohort.empty? && Date::MONTHNAMES.include?(cohort)) do
       @students.last["cohort"] = cohort
       break
     end
