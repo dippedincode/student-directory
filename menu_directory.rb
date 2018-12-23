@@ -87,12 +87,26 @@ def print_list
 # previously used .each method as follows:
 #  array.each.with_index(1) do |record, index|
 #    puts "#{index}: #{record[:name]} (#{record[:cohort]} cohort)"
+  by_months = Hash.new()
+  Date::MONTHNAMES.drop(1).each do |month|
+    @students.each do |student|
+      by_months[month] = [] unless by_months.has_key?(month)
+      by_months[month].push(student[:name]) if month == student["cohort"]
+    end
+  end
+  by_months.each do |key, value|
+    puts "    Students in #{key} cohort : "
+    puts value
+  end
+end
+
+=begin
   k = 0
   while @students[k] do
     puts "    #{k+1}: #{@students[k][:name]} (#{@students[k]["cohort"]} cohort)"
     k += 1
   end
-end
+=end
 
 def print_footer
   puts "Overall, we have #{@students.count} great student#{@students.count != 1 ? "s" : ""}".center(40)
