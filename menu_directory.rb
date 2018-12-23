@@ -1,7 +1,7 @@
 @students = []  # an empty array accessible to all methods
 
 def print_menu
-  puts "1. Input the students"
+  puts "1. Input student data"
   puts "2. Show the students list"
   puts "3. Save the list to students.csv"
   puts "4. Load the list from students.csv"
@@ -50,17 +50,24 @@ def interactive_menu
 end
 
 def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
-  # get the first name
+  puts "Please enter the student's name"
+  puts "To finish, just hit return again"
   name = STDIN.gets.chomp
-  # while the name is not empty, repeat this code
+  # while name is not empty, repeat this code
   while !name.empty? do
     # add the student record hash to the array
-    @students << {name: name, cohort: :november}
-    puts "Now we have #{@students.count} student#{@students.count != 1 ? "s" : ""}"
-    # get another name from the user
-    name = STDIN.gets.chomp
+    @students << {name: name, "cohort" => "tbd_cohort"}
+    puts "Please enter the student's cohort"
+    puts "To finish, just hit return twice"
+    cohort = STDIN.gets.chomp
+    while !cohort.empty? do
+      @students.last["cohort"] = cohort
+      break
+    end
+      puts "Now we have #{@students.count} student#{@students.count != 1 ? "s" : ""}"
+      puts "Please enter the student's name"
+      puts "To finish, just hit return again"
+      name = STDIN.gets.chomp   # get another name
   end
 end
 
@@ -75,7 +82,7 @@ def print_list
 #    puts "#{index}: #{record[:name]} (#{record[:cohort]} cohort)"
   k = 0
   while @students[k] do
-    puts "    #{k+1}: #{@students[k][:name]} (#{@students[k][:cohort]} cohort)"
+    puts "    #{k+1}: #{@students[k][:name]} (#{@students[k]["cohort"]} cohort)"
     k += 1
   end
 end
