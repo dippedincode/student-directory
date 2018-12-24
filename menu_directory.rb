@@ -94,13 +94,21 @@ def print_list
       by_months[month].push(student[:name]) if month == student["cohort"]
     end
   end
-  by_months.each do |key, value|
-    puts "    Students in #{key} cohort : "
-    puts value
+  by_months.each do |month, stud_arr|
+    print "    Students in #{month} cohort : "
+    if stud_arr.empty?
+      print "none"
+      puts
+    else 
+      puts
+      stud_arr.each.with_index(1) do |name, index|
+      puts "        #{index}: #{name}"
+      end
+    end
   end
 end
 
-=begin
+=begin   alternative way of doing numerated list  
   k = 0
   while @students[k] do
     puts "    #{k+1}: #{@students[k][:name]} (#{@students[k]["cohort"]} cohort)"
