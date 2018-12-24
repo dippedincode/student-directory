@@ -59,19 +59,32 @@ def input_students
   while !name.empty? do
     # add the student record hash to the array
     @students << {name: name, "cohort" => "undefined"}
-    puts "Please enter a valid month for the student's cohort"
-    #puts "To finish, just hit return twice"
+    puts "Please enter the month of the student's cohort"
     loop do
       cohort = STDIN.gets.chomp
       cohort = cohort.strip.capitalize
       if !cohort.empty? && Date::MONTHNAMES.include?(cohort)
         @students.last["cohort"] = cohort
+        #puts "Now we have #{@students.count} student#{@students.count != 1 ? "s" : ""}"
+        #puts "Please enter the next student's name"
+        #puts "To finish, just hit return again"
+        break
+      else
+        puts "That is an invalid month, please try again"
+      end 
+    end
+    puts "Please enter the student's age (years)"
+    loop do
+      age = STDIN.gets.chomp
+      age = age.strip.to_i
+      if age > 0
+        @students.last["age"] = age
         puts "Now we have #{@students.count} student#{@students.count != 1 ? "s" : ""}"
         puts "Please enter the next student's name"
         puts "To finish, just hit return again"
         break
       else
-        puts "That is an invalid month, please try again"
+        puts "That is an invalid age, please try again"
       end 
     end
     name = STDIN.gets.chomp   # get another name
@@ -123,7 +136,7 @@ end
 def save_students
   file = File.open("students.csv", "w")
   @students.each do |student|   # iterate over the array of student records
-    student_data = [student[:name], student[:cohort]]   # convert hash to an array
+    student_data = [student[:name], student["cohort"], student["age"]]   # convert hash to an array
     csv_line = student_data.join(",")   # turn that array into string "a,b"
     file.puts csv_line
   end
@@ -133,8 +146,8 @@ end
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
-    name, cohort = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym}
+    name, cohort, age = line.chomp.split(",")
+    @students << {name: name, "cohort" => cohort, "age" => age}
   end
   file.close
 end
