@@ -138,13 +138,13 @@ def save_students
   loop do
     filename = STDIN.gets.chomp.strip
     if !filename.empty?
-      file = File.open(filename, "w")
-      @students.each do |student|   # iterate over the array of student records
-        student_data = [student[:name], student[:cohort], student["age"]]   # convert hash to an array
-        csv_line = student_data.join(",")   # turn that array into string "a,b,c"
-        file.puts csv_line
+      File.open(filename, "w") do |file|
+        @students.each do |student|   # iterate over the array of student records
+          student_data = [student[:name], student[:cohort], student["age"]]   # convert hash to an array
+          csv_line = student_data.join(",")   # turn that array into string "a,b,c"
+          file.puts csv_line
+        end
       end
-      file.close
       break
     else
       puts "No filename was given, please enter one"
@@ -171,12 +171,12 @@ def load_students(*filenames)
   else
     use_filename = filenames.first
   end
-  file = File.open(use_filename, "r")
-  file.readlines.each do |line|
-    name, cohort, age = line.chomp.split(",")
-    push_to_arr({name: name, cohort: cohort, "age" => age})
+  File.open(use_filename, "r") do |file|
+    file.readlines.each do |line|
+      name, cohort, age = line.chomp.split(",")
+      push_to_arr({name: name, cohort: cohort, "age" => age})
+    end
   end
-  file.close
   puts "Loaded #{@students.count} students from #{use_filename}"
 end
 
