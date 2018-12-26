@@ -35,6 +35,7 @@ def process(selection)
 end
 
 def show_students
+  puts "You chose 2 - Show the students list" 
   if @students.count != 0
     print_header
     print_list
@@ -52,6 +53,7 @@ def interactive_menu
 end
 
 def input_students
+  puts "You chose 1 - Input student data"
   puts "Please enter the student's name"
   puts "To finish, just hit return again"
   name = STDIN.gets.chomp
@@ -134,6 +136,7 @@ def print_footer
 end
 
 def save_students
+  puts "You chose 3 - Save the list to students.csv"
   file = File.open("students.csv", "w")
   @students.each do |student|   # iterate over the array of student records
     student_data = [student[:name], student[:cohort], student["age"]]   # convert hash to an array
@@ -144,6 +147,7 @@ def save_students
 end
 
 def load_students(filename = "students.csv")
+  puts "You chose 4 - Load the list from students.csv"
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, age = line.chomp.split(",")
@@ -157,10 +161,12 @@ def push_to_arr(record)
 end
 
 def clear_list_memory
+  puts "You chose 5 - Clear the list from program memory"
   @students = []
 end
 
 def clear_students_file
+  puts "You chose 6 - Clear the file students.csv"
   file = File.open("students.csv", "w")
   file.print ""   # overwrite whatever is in the file with no character
   file.close
