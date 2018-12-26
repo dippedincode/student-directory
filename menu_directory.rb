@@ -5,8 +5,8 @@ require 'date'
 def print_menu
   puts "1. Input student data"
   puts "2. Show the students list"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list to a file"
+  puts "4. Load the list from a file"
   puts "5. Clear the list from program memory"
   puts "6. Clear the file students.csv"
   puts "9. Exit"
@@ -21,8 +21,8 @@ def process(selection)
     show_students
   when "3"
     save_students   
-  when "4" 
-    load_students   # now this will load from students.csv by default
+  when "4"
+    load_students
   when "5"
     clear_list_memory
   when "6"
@@ -30,7 +30,7 @@ def process(selection)
   when "9"
     exit  # this will stop the program
   else
-    puts "I don't know what you meant, please try again"
+    puts "I don't know what you mean, please try again"
   end
 end
 
@@ -67,9 +67,6 @@ def input_students
       cohort = cohort.strip.capitalize
       if !cohort.empty? && Date::MONTHNAMES.include?(cohort)
         @students.last[:cohort] = cohort
-        #puts "Now we have #{@students.count} student#{@students.count != 1 ? "s" : ""}"
-        #puts "Please enter the next student's name"
-        #puts "To finish, just hit return again"
         break
       else
         puts "That is an invalid month, please try again"
@@ -136,24 +133,51 @@ def print_footer
 end
 
 def save_students
-  puts "You chose 3 - Save the list to students.csv"
-  file = File.open("students.csv", "w")
-  @students.each do |student|   # iterate over the array of student records
-    student_data = [student[:name], student[:cohort], student["age"]]   # convert hash to an array
-    csv_line = student_data.join(",")   # turn that array into string "a,b,c"
-    file.puts csv_line
+  puts "You chose 3 - Save the list to a file"
+  puts "Please enter the name of the file to save it in"
+  loop do
+    filename = STDIN.gets.chomp.strip
+    if !filename.empty?
+      file = File.open(filename, "w")
+      @students.each do |student|   # iterate over the array of student records
+        student_data = [student[:name], student[:cohort], student["age"]]   # convert hash to an array
+        csv_line = student_data.join(",")   # turn that array into string "a,b,c"
+        file.puts csv_line
+      end
+      file.close
+      break
+    else
+      puts "No filename was given, please enter one"
+    end 
   end
-  file.close
 end
 
-def load_students(filename = "students.csv")
-  puts "You chose 4 - Load the list from students.csv"
-  file = File.open(filename, "r")
+def load_students(*filenames)
+  use_filename = ""
+  if filenames.empty?
+    puts "You chose 4 - Load the list from a file"
+    puts "Please enter the name of the file to load from"
+    loop do
+      input_filename = STDIN.gets.chomp.strip
+      if !input_filename.empty? && File.exists?(input_filename)
+        use_filename = input_filename
+        break
+      elsif input_filename.empty?
+        puts "No filename was given, please enter one" 
+      else   # file must not exist
+        puts "No file with that name exists, please enter another one"
+      end
+    end
+  else
+    use_filename = filenames.first
+  end
+  file = File.open(use_filename, "r")
   file.readlines.each do |line|
     name, cohort, age = line.chomp.split(",")
     push_to_arr({name: name, cohort: cohort, "age" => age})
   end
   file.close
+  puts "Loaded #{@students.count} students from #{use_filename}"
 end
 
 def push_to_arr(record)
@@ -177,7 +201,6 @@ def try_load_students
   return if filename.nil?   # get out of the method if it isn't given
   if File.exists?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
     exit
