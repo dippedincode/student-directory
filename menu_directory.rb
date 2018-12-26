@@ -58,13 +58,13 @@ def input_students
   # while name is not empty, repeat this code
   while !name.empty? do
     # add the student record hash to the array
-    @students << {name: name, "cohort" => "undefined"}
+    push_to_arr({name: name, cohort: "undefined", "age" => 0})
     puts "Please enter the month of the student's cohort"
     loop do
       cohort = STDIN.gets.chomp
       cohort = cohort.strip.capitalize
       if !cohort.empty? && Date::MONTHNAMES.include?(cohort)
-        @students.last["cohort"] = cohort
+        @students.last[:cohort] = cohort
         #puts "Now we have #{@students.count} student#{@students.count != 1 ? "s" : ""}"
         #puts "Please enter the next student's name"
         #puts "To finish, just hit return again"
@@ -104,7 +104,7 @@ def print_list
   Date::MONTHNAMES.drop(1).each do |month|
     @students.each do |student|
       by_months[month] = [] unless by_months.has_key?(month)
-      by_months[month].push(student[:name]) if month == student["cohort"]
+      by_months[month].push(student) if month == student[:cohort]
     end
   end
   by_months.each do |month, stud_arr|
@@ -114,8 +114,8 @@ def print_list
       puts
     else 
       puts
-      stud_arr.each.with_index(1) do |name, index|
-      puts "        #{index}: #{name}"
+      stud_arr.each.with_index(1) do |student, index|
+      puts "        #{index}: #{student[:name]}, age #{student["age"]}"
       end
     end
   end
@@ -136,8 +136,8 @@ end
 def save_students
   file = File.open("students.csv", "w")
   @students.each do |student|   # iterate over the array of student records
-    student_data = [student[:name], student["cohort"], student["age"]]   # convert hash to an array
-    csv_line = student_data.join(",")   # turn that array into string "a,b"
+    student_data = [student[:name], student[:cohort], student["age"]]   # convert hash to an array
+    csv_line = student_data.join(",")   # turn that array into string "a,b,c"
     file.puts csv_line
   end
   file.close
@@ -147,9 +147,13 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, age = line.chomp.split(",")
-    @students << {name: name, "cohort" => cohort, "age" => age}
+    push_to_arr({name: name, cohort: cohort, "age" => age})
   end
   file.close
+end
+
+def push_to_arr(record)
+  @students << record
 end
 
 def clear_list_memory
