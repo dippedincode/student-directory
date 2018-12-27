@@ -1,4 +1,5 @@
 require 'date'
+require 'csv'
 
 @students = []  # an empty array accessible to all methods
 
@@ -138,11 +139,10 @@ def save_students
   loop do
     filename = STDIN.gets.chomp.strip
     if !filename.empty?
-      File.open(filename, "w") do |file|
-        @students.each do |student|   # iterate over the array of student records
+      CSV.open(filename, "wb") do |file|
+        @students.each do |student|  # iterate over the array of student records
           student_data = [student[:name], student[:cohort], student["age"]]   # convert hash to an array
-          csv_line = student_data.join(",")   # turn that array into string "a,b,c"
-          file.puts csv_line
+          file.puts student_data
         end
       end
       break
@@ -171,11 +171,11 @@ def load_students(*filenames)
   else
     use_filename = filenames.first
   end
-  File.open(use_filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort, age = line.chomp.split(",")
-      push_to_arr({name: name, cohort: cohort, "age" => age})
-    end
+  CSV.foreach(use_filename) do |row|
+    name = row[0]
+    cohort = row[1]
+    age = row[2].to_i
+    push_to_arr({name: name, cohort: cohort, "age" => age})
   end
   puts "Loaded #{@students.count} students from #{use_filename}"
 end
