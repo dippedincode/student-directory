@@ -142,7 +142,7 @@ def save_students
       CSV.open(filename, "wb") do |file|
         @students.each do |student|  # iterate over the array of student records
           student_data = [student[:name], student[:cohort], student["age"]]   # convert hash to an array
-          file.puts student_data
+          file.puts student_data  # put the array into the file and add a newline
         end
       end
       break
@@ -172,7 +172,7 @@ def load_students(*filenames)
     use_filename = filenames.first
   end
   CSV.foreach(use_filename) do |row|
-    name = row[0]
+    name = row[0]  # row becomes an array of strings for each line in the file
     cohort = row[1]
     age = row[2].to_i
     push_to_arr({name: name, cohort: cohort, "age" => age})
